@@ -1,34 +1,70 @@
 package arq.comp;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class PC
 {
-    private CPU cpu;
+    private CPU[] cpus;
     private Memory memory;
-    private ArrayList<String> data;
 
-    PC(int memSize, int coreNum, ArrayList<String> data)
+    PC(int memSize, int cpuNum, int coreNum, String dataPath)
     {
         memory = new Memory(memSize);
 
-        int cacheL2 = memSize / 10;
-        int cacheL1 = cacheL2 / 2;
+        cpus = new CPU[cpuNum];
 
-        cpu = new CPU(coreNum, cacheL1, cacheL2);
+        for(CPU cpu: cpus)
+        {
+            cpu.setCpu(coreNum, memSize / 2, memSize / 10);
+        }
 
-        this.data = data;
-
-        toMem();
+        toMem(dataPath);
     }
 
-    private void toMem()
+    private void toMem(String dataPath)
+    {
+        File file = new File(dataPath);
+        Scanner fileData;
+        try
+        {
+            fileData = new Scanner(file);
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        while(fileData.hasNextLine())
+        {
+            memory.add(fileData.nextLine());
+        }
+
+        input();
+        //TODO Select memory to be read and save data to memory, also, select core to do the work
+    }
+
+    private void input()
     {
         Scanner scanner = new Scanner(System.in);
+        int memoryIndex;
+        int cpuIndex;
+        int coreIndex;
 
-        System.out.println("Select memory to be read");
+        System.out.println("Select memory to be read[0, " + memory.getMemory().length + "]: ");
 
-        //TODO Select memory to be read and save data to memory, also, select core to do the work
+        memoryIndex = scanner.nextInt();
+
+        System.out.println("Select a CPU[0, " + cpus.length);
+
+        cpuIndex = scanner.nextInt();
+
+        System.out.println("Select a core[0, " + cpus[cpuIndex].getCores().length);
+
+        coreIndex = scanner.nextInt();
+
+        cpus[cpuIndex].input(memory.getMemory()[memoryIndex], coreIndex);
     }
 }
