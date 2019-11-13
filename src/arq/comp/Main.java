@@ -1,8 +1,5 @@
 package arq.comp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main
@@ -13,13 +10,11 @@ public class Main
         Scanner scanner = new Scanner(System.in);
         String dataPath = "txt/";
 
-
+        // Leitura do arquivo inicial
         System.out.println("Reading file from txt folder... Enter file name: ");
         dataPath += scanner.nextLine();
 
-
-
-
+        // Inicializando um PC
         new PC(600, 2, 4, dataPath);
     }
 }
