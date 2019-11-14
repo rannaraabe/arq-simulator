@@ -4,73 +4,122 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-class PC {
-	private CPU[] cpus;
-	private Memory memory;
+class PC
+{
+    private CPU[] cpus;
+    private Memory memory;
+    private int memoryIndex;
+    private int cpuIndex;
+    private int coreIndex;
 
-	/**
-	 * Construtor parametrizado
-	 * 
-	 * @param memSize
-	 * @param cpuNum
-	 * @param coreNum
-	 * @param dataPath
-	 */
-	PC(int memSize, int cpuNum, int coreNum, String dataPath) {
-		memory = new Memory(memSize);
-		cpus = new CPU[cpuNum];
+    /**
+     * Construtor parametrizado
+     *
+     * @param memSize  tamanho da memória do pc
+     * @param cpuNum   número de cpus
+     * @param coreNum  número de core por cpu
+     * @param dataPath caminho para o arquivo contendo os dados que serão lidos na memória
+     */
+    PC(int memSize, int cpuNum, int coreNum, String dataPath)
+    {
+        int l2size = memSize / 10;
+        int l1size = l2size / 2;
 
-		for (CPU cpu : cpus) {
-			cpu.setCpu(coreNum, memSize / 2, memSize / 10);
-		}
+        memory = new Memory(memSize);
 
-		toMem(dataPath);
-	}
+        cpus = new CPU[cpuNum];
 
-	/**
-	 * Le os dados do arquivo passado e adiciona na memoria
-	 * 
-	 * @param dataPath
-	 */
-	private void toMem(String dataPath) {
-		File file = new File(dataPath);
-		Scanner fileData;
+        for(int i = 0; i < cpuNum; i++)
+        {
+            cpus[i] = new CPU();
+            cpus[i].setCpu(coreNum, l1size, l2size);
+        }
 
-		try {
-			fileData = new Scanner(file);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
-		}
+        toMem(dataPath);
+    }
 
-		while (fileData.hasNextLine()) {
-			memory.add(fileData.nextLine());
-		}
+    /**
+     * Le os dados do arquivo passado e adiciona na memoria
+     *
+     * @param dataPath caminho para o arquivo a ser lido
+     */
+    private void toMem(String dataPath)
+    {
+        File file = new File(dataPath);
+        Scanner fileData;
+        try
+        {
+            fileData = new Scanner(file);
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Arquivo invalido!");
+            return;
+        }
 
-		input();
-		// TODO Select memory to be read and save data to memory, also, select core to
-		// do the work
-	}
+        while(fileData.hasNextLine())
+        {
+            memory.add(fileData.nextLine());
+        }
+    }
 
-	/**
-	 * O usuário informa o endereço da memória principal para leitura e o core que
-	 * irá utilizar aquele dado
-	 */
-	private void input() {
-		Scanner scanner = new Scanner(System.in);
-		int memoryIndex;
-		int cpuIndex;
-		int coreIndex;
+    private void choose()
+    {
+        Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Select memory to be read[0, " + memory.getMemory().length + "]: ");
-		memoryIndex = scanner.nextInt();
+        System.out.println("Select memory to be read[0, " + (memory.getMemory().length - 1) + "]: ");
 
-		System.out.println("Select a CPU[0, " + cpus.length);
-		cpuIndex = scanner.nextInt();
+        memoryIndex = scanner.nextInt();
 
-		System.out.println("Select a core[0, " + cpus[cpuIndex].getCores().length);
-		coreIndex = scanner.nextInt();
+        System.out.println("Select a CPU[0, " + (cpus.length - 1) + "]: ");
 
-		cpus[cpuIndex].input(memory.getMemory()[memoryIndex], coreIndex);
-	}
+        cpuIndex = scanner.nextInt();
+
+        System.out.println("Select a core[0, " + (cpus[cpuIndex].getCores().length - 1) + "]: ");
+
+        coreIndex = scanner.nextInt();
+
+        System.out.println(">>> Memory state: ");
+
+        StringBuilder index = new StringBuilder();
+        StringBuffer memData = new StringBuffer();
+
+        for(int i = 0; i < memory.getMemory().length; i++)
+        {
+            index.append(i).append("|");
+            memData.append(memory.getMemory()[i]).append("|");
+        }
+
+
+        System.out.println(index);
+        System.out.println(memData);
+
+        System.out.println();
+    }
+
+    /**
+     * O usuário informa o endereço da memória principal para leitura e o core que
+     * irá utilizar aquele dado
+     */
+    void read()
+    {
+        choose();
+        // Check if Memory Address is loaded in l2 or l1, if not, load it
+        if(cpus[cpuIndex].memIsLoaded(memoryIndex, coreIndex, true))
+            cpus[cpuIndex].input(memoryIndex, coreIndex, memory.getMemory());
+    }
+
+    void write()
+    {
+        Scanner scanner = new Scanner(System.in);
+        int nValue;
+        choose();
+        System.out.println("Enter new value: ");
+        nValue = scanner.nextInt();
+
+        // Check if Memory Address is loaded, if not, do nothing
+        if(cpus[cpuIndex].memIsLoaded(memoryIndex, coreIndex, false))
+            cpus[cpuIndex].input(memoryIndex, coreIndex, memory.getMemory(), nValue);
+    }
 }
+
