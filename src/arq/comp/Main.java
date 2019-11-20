@@ -2,6 +2,10 @@ package arq.comp;
 
 import java.util.Scanner;
 
+/**
+ * @author Victor Ângelo Graça Morais - https://github.com/bllackangell
+ * @author Ranna Raabe Fernandes da Costa - https://github.com/rannaraabe
+ */
 public class Main
 {
 

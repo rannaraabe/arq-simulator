@@ -1,6 +1,11 @@
 
 package arq.comp;
 
+
+/**
+ * @author Victor Ângelo Graça Morais - https://github.com/bllackangell
+ * @author Ranna Raabe Fernandes da Costa - https://github.com/rannaraabe
+ */
 class CPU
 {
     private Core[] cores;

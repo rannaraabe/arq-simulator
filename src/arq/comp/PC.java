@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+
+/**
+ * @author Victor Ângelo Graça Morais - https://github.com/bllackangell
+ * @author Ranna Raabe Fernandes da Costa - https://github.com/rannaraabe
+ */
 class PC
 {
     private CPU[] cpus;

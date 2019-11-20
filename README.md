@@ -14,3 +14,8 @@ It tries to read or write a memory address, but for it to do that this address n
 
 * OBS.: This program maintains data coherence in all of its caches, so if an address is loaded to the l1 cache it has to be loaded to the l2 cache of the given CPU.
 * OBS.: Because this program maintains data coherence when we change a value in anywhere, be it in an l1, l2 or memory, it'll be updated in whenever this value is being used
+
+# Authors
+
+* Victor Ângelo Graça Morais - https://github.com/bllackangell
+* Ranna Raabe Fernandes da Costa - https://github.com/rannaraabe
