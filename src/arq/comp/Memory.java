@@ -42,4 +42,38 @@ class Memory
     {
         return memory;
     }
+
+    void printMemory()
+    {
+        StringBuilder index = new StringBuilder();
+        StringBuffer memData = new StringBuffer();
+        int sz;
+
+        for(int i = 0; i < memory.length; i++)
+        {
+            sz = 6;
+
+            index.append(" ".repeat(sz / 2));
+
+            index.append(i);
+
+            index.append(" ".repeat(sz / 2));
+
+            index.append("|");
+
+            memData.append(" ".repeat(sz / 2));
+
+            memData.append(memory[i]);
+
+            memData.append(" ".repeat(sz / 2));
+
+            memData.append("|");
+        }
+
+
+        System.out.println(index);
+        System.out.println(memData);
+
+        System.out.println();
+    }
 }

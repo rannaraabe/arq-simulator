@@ -3,6 +3,7 @@ package arq.comp;
 class Core
 {
     private Integer[] cacheL1;
+    private Integer blkSize;
 
     void setCache(int l1Size)
     {
@@ -28,13 +29,14 @@ class Core
         else return cacheL1[memIndex % cacheL1.length] == memIndex;
     }
 
-    void execute(int memIndex)
+    void loadToCacheL1(int memIndex)
     {
-        cacheL1[memIndex % cacheL1.length] = memIndex;
-        System.out.println("Memory Address: " + memIndex);
+        for(int i = memIndex; i < (memIndex + blkSize); i++)
+            cacheL1[i % cacheL1.length] = i;
+        System.out.println("Loaded Memory Address: " + memIndex);
     }
 
-    void execute(int memIndex, int[] memory)
+    void loadToCacheL1(int memIndex, int[] memory)
     {
         System.out.println("Data: " + memory[memIndex]);
     }
@@ -44,5 +46,44 @@ class Core
         System.out.print("Data: " + memory[memIndex] + " changed to ");
         memory[memIndex] = nValue;
         System.out.println(memory[memIndex]);
+    }
+
+    void setBlkSize(int blkSize)
+    {
+        this.blkSize = blkSize;
+    }
+
+    void printL1()
+    {
+        StringBuilder index = new StringBuilder();
+        StringBuffer memData = new StringBuffer();
+        int sz;
+
+        for(int i = 0; i < cacheL1.length; i++)
+        {
+            sz = 6;
+
+            index.append(" ".repeat(sz / 2));
+
+            index.append(i);
+
+            index.append(" ".repeat(sz / 2));
+
+            index.append("|");
+
+            memData.append(" ".repeat(sz / 2));
+
+            memData.append(cacheL1[i]);
+
+            memData.append(" ".repeat(sz / 2));
+
+            memData.append("|");
+        }
+
+
+        System.out.println(index);
+        System.out.println(memData);
+
+        System.out.println();
     }
 }

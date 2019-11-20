@@ -81,20 +81,8 @@ class PC
 
         System.out.println(">>> Memory state: ");
 
-        StringBuilder index = new StringBuilder();
-        StringBuffer memData = new StringBuffer();
+        memory.printMemory();
 
-        for(int i = 0; i < memory.getMemory().length; i++)
-        {
-            index.append(i).append("|");
-            memData.append(memory.getMemory()[i]).append("|");
-        }
-
-
-        System.out.println(index);
-        System.out.println(memData);
-
-        System.out.println();
     }
 
     /**
@@ -117,9 +105,14 @@ class PC
         System.out.println("Enter new value: ");
         nValue = scanner.nextInt();
 
-        // Check if Memory Address is loaded, if not, do nothing
-        if(cpus[cpuIndex].memIsLoaded(memoryIndex, coreIndex, false))
+        // Check if Memory Address is loaded, if not, load and write
+        if(cpus[cpuIndex].memIsLoaded(memoryIndex, coreIndex, true))
             cpus[cpuIndex].input(memoryIndex, coreIndex, memory.getMemory(), nValue);
+    }
+
+    void printMemory()
+    {
+        memory.printMemory();
     }
 }
 

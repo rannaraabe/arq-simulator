@@ -28,13 +28,18 @@ public class Main
             System.out.println("2 - write");
             System.out.println(">>> Type e to exit");
             choice = scanner.nextLine();
+
+            System.out.println(">>> Memory state: ");
+
+            pc.printMemory();
+
             switch(choice)
             {
                 case "1":
                     pc.read();
                     break;
                 case "2":
-                    pc.write(); //TODO
+                    pc.write();
                     break;
                 case "e":
                     break;
