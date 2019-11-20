@@ -29,9 +29,7 @@ public class Main
             System.out.println(">>> Type e to exit");
             choice = scanner.nextLine();
 
-            System.out.println(">>> Memory state: ");
-
-            pc.printMemory();
+            pc.printMemory(false);
 
             switch(choice)
             {

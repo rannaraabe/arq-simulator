@@ -79,10 +79,7 @@ class PC
 
         coreIndex = scanner.nextInt();
 
-        System.out.println(">>> Memory state: ");
-
-        memory.printMemory();
-
+        printMemory(true);
     }
 
     /**
@@ -110,9 +107,23 @@ class PC
             cpus[cpuIndex].input(memoryIndex, coreIndex, memory.getMemory(), nValue);
     }
 
-    void printMemory()
+    void printMemory(Boolean printCaches)
     {
+        System.out.println(">>> Memory state: ");
+
         memory.printMemory();
+
+        if(printCaches)
+        {
+
+            System.out.println(">>> L2 state: ");
+
+            cpus[cpuIndex].printL2();
+
+            System.out.println(">>> L1 state: ");
+
+            cpus[cpuIndex].getCores()[coreIndex].printL1();
+        }
     }
 }
 
