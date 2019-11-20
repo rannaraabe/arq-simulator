@@ -116,11 +116,11 @@ class PC
         if(printCaches)
         {
 
-            System.out.println(">>> L2 state: ");
+            System.out.println(">>> CPU " + cpuIndex + " L2 state: ");
 
             cpus[cpuIndex].printL2();
 
-            System.out.println(">>> L1 state: ");
+            System.out.println(">>> Core " + coreIndex + " L1 state: ");
 
             cpus[cpuIndex].getCores()[coreIndex].printL1();
         }

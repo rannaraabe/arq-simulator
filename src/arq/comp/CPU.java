@@ -49,11 +49,22 @@ class CPU
 
     boolean memIsLoaded(int memIndex, int coreIndex, boolean load)
     {
+        needToRemove();
+
         if(cores[coreIndex].l1HasMem(memIndex))
         {
             if(l2HasMem(memIndex))
             {
                 System.out.println(">>> Memory Address is in Cache l1 and Cache l2");
+
+                System.out.println(">>> L2 state: ");
+
+                printL2();
+
+                System.out.println(">>> L1 state: ");
+
+                cores[coreIndex].printL1();
+
                 return true;
             }
             else
@@ -62,6 +73,15 @@ class CPU
                 System.out.println(">>> Loading Memory Address in cache l2");
                 for(int i = memIndex; i < (memIndex + blkSize); i++)
                     cacheL2[i % cacheL2.length] = i;
+
+                System.out.println(">>> L2 state: ");
+
+                printL2();
+
+                System.out.println(">>> L1 state: ");
+
+                cores[coreIndex].printL1();
+
                 return true;
             }
 
@@ -72,6 +92,15 @@ class CPU
             System.out.println(">>> Memory Address is in Cache l2");
             System.out.println(">>> Loading Memory Address in cache l1");
             cores[coreIndex].loadToCacheL1(memIndex);
+
+            System.out.println(">>> L2 state: ");
+
+            printL2();
+
+            System.out.println(">>> L1 state: ");
+
+            cores[coreIndex].printL1();
+
             return true;
         }
         else    // if is not in L1 or L2 load to cache
@@ -85,12 +114,52 @@ class CPU
 
                 cores[coreIndex].loadToCacheL1(memIndex);
 
+                System.out.println(">>> L2 state: ");
+
+                printL2();
+
+                System.out.println(">>> L1 state: ");
+
+                cores[coreIndex].printL1();
+
+                //needToRemove();
+
                 return true;
             }
             else
+            {
+                System.out.println(">>> L2 state: ");
+
+                printL2();
+
+                System.out.println(">>> L1 state: ");
+
+                cores[coreIndex].printL1();
                 return false;
+            }
         }
 
+    }
+
+    private void needToRemove()
+    {
+        for(int x = 0; x < cores.length; x++)
+        {
+            boolean remove = true;
+            for(int i = 0; i < cores[x].getCacheL1().length; i++)
+            {
+                if(cores[x].getCacheL1()[i] != null)
+                    for(int j = 0; j < cacheL2.length; j++)
+                    {
+                        if(cacheL2[j] != null)
+                            if(cores[x].getCacheL1()[i].equals(cacheL2[j]))
+                                remove = false;
+                    }
+
+                if(remove)
+                    cores[x].getCacheL1()[i] = null;
+            }
+        }
     }
 
     void input(int memoryIndex, int coreIndex, int[] memory, int nValue)
